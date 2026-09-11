@@ -3,7 +3,6 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![Optimization](https://img.shields.io/badge/algorithm-Tabu%20Search-orange.svg)]()
 [![Benchmark](https://img.shields.io/badge/benchmark-Augerat%20Set%20A%20(27%20instances)-green.svg)]()
-[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)]()
 
 An end-to-end Python implementation and experimental benchmark of the **Tabu Search (TS)** metaheuristic applied to the **Capacitated Vehicle Routing Problem (CVRP)**. The project evaluates neighborhood structures (`2-swap` vs. `2-opt`), tabu memory dynamics, and aspiration criteria across the standard **Augerat et al. (Set A)** benchmark suite (`A-VRP`).
 
@@ -32,13 +31,7 @@ An end-to-end Python implementation and experimental benchmark of the **Tabu Sea
    - [7. Optimized Route Map (`A-n33-k5`)](#7-optimized-route-map-a-n33-k5)
    - [8. Fleet Load Distribution vs. Capacity Limit](#8-fleet-load-distribution-vs-capacity-limit)
 5. [Key Insights & Conclusions](#key-insights--conclusions)
-6. [Repository Structure](#repository-structure)
-7. [Getting Started](#getting-started)
-   - [Prerequisites](#prerequisites)
-   - [Installation](#installation)
-   - [Command-Line Interface (CLI)](#command-line-interface-cli)
-   - [Jupyter Notebook](#jupyter-notebook)
-8. [References](#references)
+6. [References](#references)
 
 ---
 
@@ -309,95 +302,6 @@ All visualizations below are directly extracted from the experimental pipeline i
 2. **Iteration Depth**: Across the tested parameter combinations, $(max\_iterations=50, tabu\_tenure=5)$ yielded the highest solution quality for 18 out of 27 instances, indicating that deeper exploration pays significant dividends in CVRP.
 3. **Tabu Memory Effect**: Tabu tenure effectively avoids short-term cycles, while the aspiration criterion ensures that breakthroughs to new global optima are immediately captured.
 4. **Computational Scalability**: Even on the largest instance (`A-n80-k10`, 80 nodes, 10 vehicles), 50 iterations of `2-swap` complete in under **5 seconds**, making Tabu Search well-suited for practical dispatch scenarios.
-
----
-
-## Repository Structure
-
-```
-cvrp-tabu-search/
-|-- data/
-|   `-- A-VRP.zip                    # Augerat et al. Set A benchmark instances (.vrp)
-|-- docs/
-|   `-- images/                      # High-resolution experiment plots & diagrams
-|       |-- average_time_by_neighborhood.png
-|       |-- best_distance_per_instance.png
-|       |-- comparison_2swap_vs_2opt.png
-|       |-- convergence_best_distance_a_n33_k5.png
-|       |-- neighborhood_wins.png
-|       |-- optimized_routes_a_n33_k5.png
-|       |-- route_loads_a_n33_k5.png
-|       |-- search_history_accepted_a_n33_k5.png
-|       `-- tabu_search_flowchart.png
-|-- notebooks/
-|   `-- notebook_tabu-search.ipynb   # Complete interactive experimental study
-|-- src/
-|   |-- __init__.py
-|   |-- io_utils.py                  # TSPLIB .vrp parser & distance matrix utilities
-|   |-- tabu_search.py               # Tabu Search optimizer, moves & neighborhoods
-|   `-- visualization.py             # Route plotting, history & load charts
-|-- main.py                          # CLI runner for custom instance optimization
-`-- README.md                        # Documentation & experimental report
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-- Python 3.10 or newer (tested on Python 3.12 and 3.13)
-- `matplotlib`
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/amiraaa83/cvrp-tabu-search.git
-cd cvrp-tabu-search
-
-# Create and activate a virtual environment (optional but recommended)
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install matplotlib
-```
-
-### Command-Line Interface (CLI)
-
-Run `main.py` to optimize any instance from the benchmark dataset:
-
-```bash
-# Run with default settings (A-n33-k5, 2-swap, 50 iterations, tenure 5)
-python main.py
-
-# Solve a specific instance with custom parameters
-python main.py --instance A-n32-k5 --neighborhood 2-swap --iterations 50 --tenure 5
-
-# Compare with 2-opt neighborhood
-python main.py --instance A-n33-k5 --neighborhood 2-opt --iterations 50 --tenure 5
-
-# Headless mode (suppress GUI plot windows)
-python main.py --instance A-n60-k9 --no-plot
-```
-
-#### Available CLI Arguments:
-| Argument | Type | Default | Description |
-| :--- | :---: | :---: | :--- |
-| `--data` | `str` | `data/A-VRP.zip` | Path to the `.zip` archive containing `.vrp` instances |
-| `--instance` | `str` | `A-n33-k5` | Name of the instance to solve (e.g. `A-n32-k5`, `A-n80-k10`) |
-| `--neighborhood` | `str` | `2-swap` | Neighborhood operator: `2-swap` or `2-opt` |
-| `--iterations` | `int` | `50` | Maximum number of Tabu Search iterations |
-| `--tenure` | `int` | `5` | Tabu tenure duration (memory lifespan) |
-| `--no-plot` | `flag`| `False` | Disable interactive matplotlib window display |
-
-### Jupyter Notebook
-
-To reproduce the benchmark experiments and generate the tables and plots:
-
-```bash
-jupyter notebook notebooks/notebook_tabu-search.ipynb
-```
 
 ---
 
